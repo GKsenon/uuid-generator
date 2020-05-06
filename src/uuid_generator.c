@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <ctype.h>
 #include <uuid_generator.h>
 
 #include "random_number_generator.h"
+
+int uuid_validate_char(int position, char uuid_char);
 
 int uuid_init()
 {
@@ -59,4 +62,43 @@ int uuid_compare(uuid_t *first, uuid_t *second)
         }
     }
     return 1;
+}
+
+int uuid_validate(char *buf)
+{
+    int i;
+    char lower_case_uuid_char;
+
+    for(i = 0; i < 36; i++)
+    {
+        if(buf[i] == '\0' || buf[i] == '\n')
+            return 0;
+
+        lower_case_uuid_char = tolower(buf[i]);
+        if(!uuid_validate_char(i, lower_case_uuid_char))
+            return 0;
+    }
+
+    return buf[i] == '\0';
+}
+
+int uuid_validate_char(int position, char uuid_char)
+{
+    switch(position)
+    {
+        case 8:
+        case 13:
+        case 18:
+        case 23:
+            return uuid_char == '-';
+
+        case 14:
+            return uuid_char == '4';
+    
+        case 19:
+            return uuid_char == '8' || uuid_char == '9' || uuid_char == 'a' || uuid_char == 'b';
+
+        default:
+            return isxdigit(uuid_char);
+    }
 }

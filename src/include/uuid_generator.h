@@ -12,3 +12,5 @@ uuid_t uuid_generate();
 void uuid_to_string(uuid_t *uuid, char *buf);
 
 int uuid_compare(uuid_t *first, uuid_t *second);
+
+int uuid_validate(char *buf);
