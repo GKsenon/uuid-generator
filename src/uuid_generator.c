@@ -6,6 +6,8 @@
 
 int uuid_validate_char(int position, char uuid_char);
 
+unsigned char uuid_parse_hex_char(char hex);
+
 int uuid_init()
 {
     return generator_init();
@@ -101,4 +103,40 @@ int uuid_validate_char(int position, char uuid_char)
         default:
             return isxdigit(uuid_char);
     }
+}
+
+uuid_t uuid_parse(char *buf)
+{
+    uuid_t uuid;
+    int i, j;
+    unsigned char byte;
+    for(i = 0, j = 0; i < 36; i++)
+    {
+        if(buf[i] == '\0')
+            return uuid;
+
+        if(!isxdigit(buf[i]))
+            continue;
+
+        byte = uuid_parse_hex_char(tolower(buf[i]));
+
+        if(j % 2 == 0)
+            uuid.data[j / 2] = byte << 4;
+        else
+            uuid.data[j / 2] |= byte;
+
+        j++;
+    }
+
+    return uuid;
+}
+
+unsigned char uuid_parse_hex_char(char hex)
+{
+    if(hex >= '0' && hex <= '9')
+        return hex - '0';
+    else if(hex >= 'a' && hex <= 'f')
+        return hex - 'a' + 10;
+    else
+        return 0;    
 }

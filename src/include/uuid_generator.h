@@ -1,3 +1,5 @@
+#pragma once
+
 typedef struct
 {
     unsigned char data[16];
@@ -14,3 +16,5 @@ void uuid_to_string(uuid_t *uuid, char *buf);
 int uuid_compare(uuid_t *first, uuid_t *second);
 
 int uuid_validate(char *buf);
+
+uuid_t uuid_parse(char *buf);

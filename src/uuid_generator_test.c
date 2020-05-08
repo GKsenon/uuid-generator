@@ -41,6 +41,14 @@ int main()
     REQUIRE(uuid_validate(wrong_variant_uuid) == 0);
     REQUIRE(uuid_validate(not_separated_uuid) == 0);
 
+    uuid_t parsed_uuid = uuid_parse(valid_uuid);
+    unsigned char uuid_data[] = { 0x95, 0xcf, 0xb8, 0x5, 0xad, 0xe0, 0x4b, 0x6c, 0xb5, 0x61, 0xae, 0xd7, 0x71, 0x50, 0x50, 0x20 };
+    int i;
+    for(i = 0; i < 16; i++)
+    {
+        REQUIRE(parsed_uuid.data[i] == uuid_data[i]);
+    }
+
     uuid_close();
 
     return 0;
